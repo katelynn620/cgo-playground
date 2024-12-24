@@ -87,9 +87,9 @@ extern "C" {
 #endif
 
 extern ServerHandle* InitServer(char* server);
-extern char* GetLastError(void* handle);
-extern void CloseServer(void* handle);
-extern char* GetData(void* handle, char* input);
+extern char* GetLastError(ServerHandle* handle);
+extern void CloseServer(ServerHandle* handle);
+extern char* GetData(ServerHandle* handle, char* input);
 
 #ifdef __cplusplus
 }

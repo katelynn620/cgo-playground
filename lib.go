@@ -38,35 +38,32 @@ func InitServer(server *C.char) *C.ServerHandle {
 }
 
 //export GetLastError
-func GetLastError(handle unsafe.Pointer) *C.char {
-	h := (*C.ServerHandle)(handle)
-	return h.error_message
+func GetLastError(handle *C.ServerHandle) *C.char {
+	return handle.error_message
 }
 
 //export CloseServer
-func CloseServer(handle unsafe.Pointer) {
-	h := (*C.ServerHandle)(handle)
-	if h == nil {
+func CloseServer(handle *C.ServerHandle) {
+	if handle == nil {
 		return
 	}
 
 	// free all pointer
-	C.free(unsafe.Pointer(h.server))
-	C.free(unsafe.Pointer(h.error_message))
-	C.free(unsafe.Pointer(h))
+	C.free(unsafe.Pointer(handle.server))
+	C.free(unsafe.Pointer(handle.error_message))
+	C.free(unsafe.Pointer(handle))
 }
 
 //export GetData
-func GetData(handle unsafe.Pointer, input *C.char) *C.char {
-	h := (*C.ServerHandle)(handle)
-	if h == nil || h.is_valid == 0 {
+func GetData(handle *C.ServerHandle, input *C.char) *C.char {
+	if handle == nil || handle.is_valid == 0 {
 		return C.CString("invalid handle")
 	}
 
 	goInput := C.GoString(input)
 	if goInput != "valid-input" {
 		errorMessage := "invalid input"
-		h.error_message = C.CString(errorMessage)
+		handle.error_message = C.CString(errorMessage)
 		return nil
 	}
 
