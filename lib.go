@@ -64,10 +64,13 @@ func GetData(handle unsafe.Pointer, input *C.char) *C.char {
 	}
 
 	goInput := C.GoString(input)
-	if goInput == "valid-input" {
-		return C.CString("data-from-server")
+	if goInput != "valid-input" {
+		errorMessage := "invalid input"
+		h.error_message = C.CString(errorMessage)
+		return nil
 	}
-	return C.CString("invalid input")
+
+	return C.CString("data-from-server")
 }
 
 func main() {}
